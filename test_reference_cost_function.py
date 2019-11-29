@@ -20,8 +20,8 @@ def test_reference_cost_function():
                 new = temp.copy()
                 start_score = reference_cost_function(new)
     
-    submission['assigned_day'] = new
+    #submission['assigned_day'] = new
     score = reference_cost_function(new)
-    submission.to_csv(f'submission_{score}.csv')
-    print(f'Score: {score}')
+    #submission.to_csv(f'submission_{score}.csv')
+    #print(f'Score: {score}')
     assert score == 672254.0276683343
