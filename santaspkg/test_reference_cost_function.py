@@ -1,6 +1,6 @@
 import pandas as pd
-import dataset
-from reference_cost_function import reference_cost_function, choice_dict
+from santaspkg import dataset
+from santaspkg.reference_cost_function import reference_cost_function, choice_dict
 
 def test_reference_cost_function():
     submission = pd.read_csv(dataset.sample_submission_file, index_col='family_id')

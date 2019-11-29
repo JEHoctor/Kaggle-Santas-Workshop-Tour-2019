@@ -1,6 +1,6 @@
 from pathlib import Path
 
-data_dir = Path(__file__).parent / 'santa-workshop-tour-2019'
+data_dir = Path(__file__).parent.parent / 'santa-workshop-tour-2019'
 family_data_file = data_dir / 'family_data.csv'
 sample_submission_file = data_dir / 'sample_submission.csv'
 

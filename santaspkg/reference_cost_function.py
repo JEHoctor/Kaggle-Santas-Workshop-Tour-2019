@@ -3,7 +3,7 @@
 
 import numpy as np
 import pandas as pd
-import dataset
+from santaspkg import dataset
 
 data = pd.read_csv(dataset.family_data_file, index_col='family_id')
 

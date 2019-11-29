@@ -1,6 +1,7 @@
-from .four_x_faster import cost_function as cost_function_under_test
-from ..reference_cost_function import reference_cost_function
-from .. import dataset
+from santaspkg.cost_function.four_x_faster import cost_function as cost_function_under_test
+from santaspkg.reference_cost_function import reference_cost_function
+from santaspkg import dataset
+import pandas as pd
 
 
 def both_cost_functions(prediction):
@@ -8,6 +9,7 @@ def both_cost_functions(prediction):
     b = cost_function_under_test(prediction)
     assert a == b
     return a
+
 
 def test_four_x_faster_cost_function():
     submission = pd.read_csv(dataset.sample_submission_file, index_col='family_id')

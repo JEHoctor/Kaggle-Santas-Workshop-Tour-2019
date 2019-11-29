@@ -1,7 +1,7 @@
 # The author of this cost function implementation claims it is 4x faster.
 # https://www.kaggle.com/xhlulu/santa-s-2019-4x-faster-cost-function
 
-from .. import dataset
+from santaspkg import dataset
 import numpy as np
 import pandas as pd
 
