@@ -1,5 +1,5 @@
 from santaspkg.cost_function.four_x_faster import cost_function as cost_function_under_test
-from santaspkg.reference_cost_function import reference_cost_function
+from santaspkg.reference_cost_function import reference_cost_function, choice_dict
 from santaspkg import dataset
 import pandas as pd
 
