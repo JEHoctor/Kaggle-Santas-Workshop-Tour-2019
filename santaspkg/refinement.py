@@ -26,7 +26,7 @@ def refinement_pass(prediction):
 
 def refine_until_convergence(prediction):
     new_prediction = refinement_pass(prediction)
-    while new_prediction != prediction:
+    while not np.array_equal(new_prediction, prediction):
         prediction = new_prediction
         new_prediction = refinement_pass(prediction)
     return new_prediction
