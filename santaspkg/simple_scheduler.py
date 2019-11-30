@@ -3,10 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from santaspkg.cost_function import soft_cost_function as cost_function
 from santaspkg.refinement import refinement_pass, refine_until_convergence
-
-# Some constants
-data_dir = "./santa-workshop-tour-2019/"
-family_file = "family_data.csv"
+from santaspkg.dataset import data
 
 NDAYS = 100
 NFAMS = 5000
@@ -71,15 +68,17 @@ def accounting_cost(people_count):
     return total_cost
 
 # Read in the data
-df_family = pd.read_csv(data_dir+family_file)
+df_family = data
+
 # The "choice_" column headings use a lot of room, change to "ch_"
 the_columns = df_family.columns.values
 for ich in range(10):
-    the_columns[ich+1] = "ch_"+str(ich)
+    the_columns[ich] = "ch_"+str(ich)
 df_family.columns = the_columns
 
 # Total number of people
-total_people  = df_family['n_people'].sum()
+total_people  = sum(df_family['n_people'])
+
 # and average per day:
 ave_ppl_day = int(total_people / NDAYS)
 print("Total number of people visiting is {}, about {} per day".format(total_people, ave_ppl_day))
@@ -220,7 +219,7 @@ if df_family['assigned_day'].min() < 0:
 # Cost
 new = df_family['assigned_day'].tolist()
 
-new = refine_until_convergence(new)
+#new = refine_until_convergence(new)
 
 df_family['assigned_day'] = new
 score = cost_function(new)
@@ -228,4 +227,5 @@ score = cost_function(new)
 print(f'Score: {score}')
 
 # Write out the submission file:
+df_family['family_id'] = df_family.index
 df_family[['family_id','assigned_day']].to_csv(f"./santa-workshop-tour-2019/submission_{score}.csv", index=False)
