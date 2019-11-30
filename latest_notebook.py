@@ -20,7 +20,7 @@ days = list(range(N_DAYS,0,-1))
 best = sample_submission['assigned_day'].tolist()
 
 # Refine the sample submission
-new = refinement_pass(best)
+new = refine_until_convergence(best)
 
 sample_submission['assigned_day'] = new
 score = cost_function(new)
