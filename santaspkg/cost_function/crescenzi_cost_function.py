@@ -4,10 +4,7 @@
 import numpy as np
 import pandas as pd 
 from numba import njit
-from santaspkg import dataset
-
-
-data = pd.read_csv(dataset.family_data_file, index_col='family_id')
+from santaspkg.dataset import data
 
 
 desired = data.values[:, :-1]
@@ -31,7 +28,13 @@ penalties = np.asarray([
 
 def cost_function(prediction):
     penalty, n_out_of_range = jited_cost(np.asarray(prediction), desired, family_size, penalties)
+    assert n_out_of_range == 0
     return penalty
+
+
+def soft_cost_function(prediction):
+    penalty, n_out_of_range = jited_cost(np.asarray(prediction), desired, family_size, penalties)
+    return penalty + (10**8) * n_out_of_range
 
 
 @njit()
@@ -40,6 +43,7 @@ def jited_cost(prediction, desired, family_size, penalties):
     MAX_OCCUPANCY = 300
     MIN_OCCUPANCY = 125
     penalty = 0
+    # dtype=np.int16 could work and save hella space
     daily_occupancy = np.zeros(N_DAYS + 1, dtype=np.int64)
     for i in range(len(prediction)):
         n = family_size[i]
