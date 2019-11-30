@@ -1,9 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from santaspkg.cost_function import soft_cost_function as cost_function
+from santaspkg.refinement import refinement_pass, refine_until_convergence
 
 # Some constants
-data_dir = "../input/santa-workshop-tour-2019/"
+data_dir = "./santa-workshop-tour-2019/"
 family_file = "family_data.csv"
 
 NDAYS = 100
@@ -215,5 +217,15 @@ if df_family['assigned_day'].min() < 0:
     print("Number assigned = {}".format(sum(df_family['assigned_day'] > 0)))
     halt_on_this_routine()
 
+# Cost
+new = df_family['assigned_day'].tolist()
+
+new = refine_until_convergence(new)
+
+df_family['assigned_day'] = new
+score = cost_function(new)
+#df_family.to_csv(f'./santa-workshop-tour-2019/submission_{score}.csv')
+print(f'Score: {score}')
+
 # Write out the submission file:
-df_family[['family_id','assigned_day']].to_csv("submission.csv", index=False)
+df_family[['family_id','assigned_day']].to_csv(f"./santa-workshop-tour-2019/submission_{score}.csv", index=False)
