@@ -217,13 +217,15 @@ def initialize():
         print("Number assigned = {}".format(sum(df_family['assigned_day'] > 0)))
         halt_on_this_routine()
     
-    return df_family
+    new = df_family['assigned_day'].tolist()
+    
+    return new, df_family
     
     
 if __name__ == "__main__":
-    df_family = initialize()
+    new, df_family = initialize()
     
-    new = df_family['assigned_day']
+    # Score it
     score = cost_function(new)
     print(f'Score: {score}')
     
