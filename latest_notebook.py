@@ -5,6 +5,7 @@ from santaspkg.cost_function import cost_function
 from santaspkg.cost_function import soft_cost_function as cost_function
 from santaspkg.dataset import data, sample_submission
 from santaspkg.refinement import refine_until_convergence, refinement_pass
+from santaspkg.simple_scheduler import initialize
 
 #Make objects to reference later
 
@@ -17,7 +18,10 @@ choice_dict = data[cols].to_dict()
 days = list(range(N_DAYS,0,-1))
 
 # Start with the sample submission values
-best = sample_submission['assigned_day'].tolist()
+#best = sample_submission['assigned_day'].tolist()
+
+# Start with the initializer
+best, _ = initialize()
 
 # Refine the sample submission
 new = refine_until_convergence(best)
