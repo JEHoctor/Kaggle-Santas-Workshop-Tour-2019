@@ -11,31 +11,45 @@ from santaspkg.cost_function.reference_cost_function import reference_cost_funct
 from santaspkg.cost_function.four_x_faster import cost_function as four_x_faster_cost_function
 from santaspkg.cost_function.crescenzi_cost_function import cost_function as crescenzi_cost_function
 
+from collections import namedtuple
+
+
+FunctionDetails = namedtuple(
+    'FunctionDetails',
+    ['name', 'f', 'input_type', 'warm_f'],
+    defaults=(False,),
+)
+
+
 named_functions = [
-    ('reference', reference_cost_function),
-    ('4x faster', four_x_faster_cost_function),
-    ('crescenzi', crescenzi_cost_function),
+    FunctionDetails('reference', reference_cost_function, 'list'),
+    FunctionDetails('4x faster', four_x_faster_cost_function, 'list'),
+    FunctionDetails('crescenzi', crescenzi_cost_function, 'numpy', warm_f=True),
 ]
 
 
 def main():
-    submission = pd.read_csv(
-        dataset.sample_submission_file, index_col='family_id')
-    prediction = submission['assigned_day'].tolist()
+    submission = dataset.sample_submission
+    prediction_as_list = submission['assigned_day'].tolist()
+    prediction_as_numpy = np.asarray(prediction_as_list)
 
-    for function_name, f in named_functions:
-        if function_name == 'crescenzi':
-            # This is a bit of a mess honestly, but necessary so that each method can
-            # be measured with its preferred input data type.
-            prediction = np.asarray(prediction)
-            # Also the function seems to need to be run once to be JIT compiled.
-            f(prediction)
+    for function_name, f, input_type, warm_f in named_functions:
+        if input_type == 'list':
+            prediction_correct_type = prediction_as_list
+        elif input_type == 'numpy':
+            prediction_correct_type = prediction_as_numpy
+        else:
+            raise ValueError('For each named function, the input_type must be \'list\' or \'numpy\'.')
+
+        if warm_f:
+            f(prediction_correct_type)
+
         times = timeit.repeat(
             'f(prediction)',
             number=10**2,
             globals={
                 'f': f,
-                'prediction': prediction
+                'prediction': prediction_correct_type
             })
         print(function_name, np.mean(times), np.std(times))
 
