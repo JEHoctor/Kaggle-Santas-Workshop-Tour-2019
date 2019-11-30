@@ -9,16 +9,16 @@ import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 # For example, running this (by clicking run or pressing Shift+Enter) will list all files under the input directory
 
 import os
-for dirname, _, filenames in os.walk('/kaggle/input'):
+for dirname, _, filenames in os.walk('./santa-workshop-tour-2019'):
     for filename in filenames:
         print(os.path.join(dirname, filename))
 
 # Any results you write to the current directory are saved as output.
 
-fpath = '/kaggle/input/santa-2019-workshop-scheduling/family_data.csv'
+fpath = './santa-workshop-tour-2019/family_data.csv'
 data = pd.read_csv(fpath, index_col='family_id')
 
-fpath = '/kaggle/input/santa-2019-workshop-scheduling/sample_submission.csv'
+fpath = './santa-workshop-tour-2019/sample_submission.csv'
 submission = pd.read_csv(fpath, index_col='family_id')
 
 family_size_dict = data[['n_people']].to_dict()['n_people']
