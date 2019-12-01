@@ -11,7 +11,7 @@ class AssignmentHelper(object):
         else:
             self.copy_constructor(other)
 
-    def non_copy_constructor():
+    def non_copy_constructor(self):
         # Index 0 of daily_occupancy is unused.
         self.daily_occupancy = np.zeros(N_DAYS+1, dtype=np.int16)
         self.assignment = np.full(len(family_size), -1, dtype=np.int8)
@@ -19,7 +19,7 @@ class AssignmentHelper(object):
         self.n_days_below_min = N_DAYS
         self.n_days_above_max = 0
 
-    def copy_constructor(other):
+    def copy_constructor(self, other):
         self.daily_occupancy  = np.copy(other.daily_occupancy)
         self.assignment       = np.copy(other.assignment)
 
