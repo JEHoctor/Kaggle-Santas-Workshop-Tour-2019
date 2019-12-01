@@ -36,6 +36,8 @@ penalties = np.asarray([
         500 + 36 * n + 398 * n
     ] for n in range(family_size.max() + 1)
 ])
+N_FAMILIES = len(family_size)
+
 
 desired.flags.writeable = False
 family_size.flags.writeable = False

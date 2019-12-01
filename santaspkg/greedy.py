@@ -1,5 +1,5 @@
 from santaspkg.constants import *
-from santaspkg.dataset import desired, family_size, penalties
+from santaspkg.dataset import desired, family_size, penalties, N_FAMILIES
 
 import numpy as np
 
@@ -14,7 +14,7 @@ class AssignmentHelper(object):
     def non_copy_constructor(self):
         # Index 0 of daily_occupancy is unused.
         self.daily_occupancy = np.zeros(N_DAYS+1, dtype=np.int16)
-        self.assignment = np.full(len(family_size), -1, dtype=np.int8)
+        self.assignment = np.full(N_FAMILIES, -1, dtype=np.int8)
 
         self.n_days_below_min = N_DAYS
         self.n_days_above_max = 0
@@ -139,3 +139,14 @@ def greedy(family_order):
         ah.assign(fam_id, day)
 
     return ah.assignment
+
+
+families_in_order = np.array(list(range(N_FAMILIES)), dtype=np.int8)
+
+
+def random_greedy(random_state=None):
+    if random_state is None:
+        random_state = np.random.RandomState()
+    family_order = random_state.permutation(families_in_order)
+    assignment = greedy(family_order)
+    return assignment
