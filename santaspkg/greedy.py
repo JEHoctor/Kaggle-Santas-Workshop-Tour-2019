@@ -141,7 +141,7 @@ def greedy(family_order):
     return ah.assignment
 
 
-families_in_order = np.array(list(range(N_FAMILIES)), dtype=np.int8)
+families_in_order = np.array(list(range(N_FAMILIES)), dtype=np.int16)
 
 
 def random_greedy(random_state=None):
