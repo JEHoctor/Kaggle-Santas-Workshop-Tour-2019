@@ -28,7 +28,7 @@ class AssignmentHelper(object):
 
     def assign(self, fam_id, day):
         assert self.assignment[fam_id] == -1, \
-                'AssignmentHelper doesn\t support reassignment of families.'
+                'AssignmentHelper doesn\'t support reassignment of families.'
         assert 1 <= day <= N_DAYS, f'Must assign to a day in the range [1, {N_DAYS}].'
         self.assignment[fam_id] = day
 
