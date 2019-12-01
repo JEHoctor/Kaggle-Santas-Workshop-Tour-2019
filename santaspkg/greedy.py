@@ -19,7 +19,7 @@ class AssignmentHelper(object):
         self.n_days_below_min = N_DAYS
         self.n_days_above_max = 0
 
-    def copy_constructor(other: AssignmentHelper):
+    def copy_constructor(other):
         self.daily_occupancy  = np.copy(other.daily_occupancy)
         self.assignment       = np.copy(other.assignment)
 
