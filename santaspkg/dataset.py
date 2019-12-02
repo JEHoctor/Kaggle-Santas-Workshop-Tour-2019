@@ -42,3 +42,7 @@ N_FAMILIES = len(family_size)
 desired.flags.writeable = False
 family_size.flags.writeable = False
 penalties.flags.writeable = False
+
+
+sample_assignment = np.copy(sample_submission.assigned_day.values)
+sample_assignment.flags.writeable = False
