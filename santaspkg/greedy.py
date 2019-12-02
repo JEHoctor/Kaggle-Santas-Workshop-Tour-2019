@@ -107,6 +107,8 @@ def greedy(family_order):
     ah = AssignmentHelper()
 
     family_iter = iter(family_order)
+
+    # stage one
     while ah.n_days_below_min > 0:
         fam_id = next(family_iter)
         day_assigned = False
@@ -119,6 +121,7 @@ def greedy(family_order):
             day = np.argmin(ah.daily_occupancy[1:]) + 1
             ah.assign(fam_id, day)
 
+    # stage two
     for fam_id in family_iter:
         consideration_mask = np.array([ah.fits_below_max(fam_id, day) for day in desired[fam_id]])
 
