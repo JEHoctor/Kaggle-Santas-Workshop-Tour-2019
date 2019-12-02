@@ -2,7 +2,7 @@ from santaspkg.cost_function import cost_function
 from santaspkg.dataset import N_FAMILIES
 from santaspkg.greedy import greedy
 from santaspkg.mk_submit import mk_submit
-from santaspkg.refinement import refine_until_convergence
+from santaspkg.refinement import refine_until_convergence, refinement_pass
 
 import numpy as np
 import multiprocessing as mp
@@ -51,7 +51,12 @@ class Chromosome(object):
             return self.score
         else:
             initial_assignment = greedy(self.get_permutation())
-            refined_assignment = refine_until_convergence(initial_assignment)
+
+            refined_assignment = initial_assignment
+            # Some other options, that are more computationally expensive:
+            # refined_assignment = refinement_pass(initial_assignment)
+            # refined_assignment = refine_until_convergence(initial_assignment)
+
             score = cost_function(refined_assignment)
             self.score = score
             self.assignment = refined_assignment
@@ -77,7 +82,7 @@ def pick_parents(gene_pool, new_genes, m, n):
     return parents
 
 
-def genetic_algorithm(generations=3):
+def genetic_algorithm(generations=3, gene_pool_size=150):
     n_cpus = mp.cpu_count() - 1
     worker_pool = mp.Pool(processes=n_cpus, maxtasksperchild=100)
 
@@ -90,10 +95,14 @@ def genetic_algorithm(generations=3):
 
         gene_pool += new_genes + children
         gene_pool.sort(key=lambda c: c.get_score())
-        gene_pool = gene_pool[:150]
+        gene_pool = gene_pool[:gene_pool_size]
 
         print('current best', gene_pool[0].get_score())
         mk_submit(gene_pool[0].assignment)
+
+    best_assignment = refine_until_convergence(gene_pool[0].assignment)
+    print('completely refined score', cost_function(best_assignment))
+    mk_submit(best_assignment)
 
 
 if __name__ == '__main__':
