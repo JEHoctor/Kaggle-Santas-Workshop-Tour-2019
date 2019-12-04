@@ -1,5 +1,5 @@
 # Kaggle-Santas-Workshop-Tour-2019
-This is for work on the Santa's Workshop Tour 2019 Kaggle competition. The code is in the `santaspkg` directory.
+This is for work on the [Santa's Workshop Tour 2019 Kaggle competition](https://www.kaggle.com/c/santa-workshop-tour-2019). The code is in the `santaspkg` directory.
 
 ## Download the dataset
 After downloading, extract the files to `Kaggle-Santas-Workshop-Tour-2019/santa-workshop-tour-2019`.
