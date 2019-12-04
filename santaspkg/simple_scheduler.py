@@ -1,3 +1,5 @@
+# adapted from https://www.kaggle.com/dan3dewey/santa-s-simple-scheduler
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
