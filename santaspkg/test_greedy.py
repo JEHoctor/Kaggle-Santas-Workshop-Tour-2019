@@ -1,9 +1,10 @@
-from santaspkg.greedy import random_greedy, AssignmentHelper, families_in_order
+from santaspkg.greedy import random_greedy, AssignmentHelper, families_in_order, greedy_v2
 from santaspkg.constants import *
 from santaspkg.dataset import desired, family_size, penalties
 from santaspkg.cost_function.crescenzi_cost_function import jited_cost
 from santaspkg.cost_function import reference_cost_function
 from santaspkg.dataset import sample_assignment
+from santaspkg.simple_scheduler import initialize
 
 import numpy as np
 
@@ -49,3 +50,9 @@ def test_marginal_accounting_cost():
 
     err_std = (costs - marginal_costs).std()
     assert err_std < 1e-6
+
+def test_greedy_v2():
+    assignment = greedy_v2(families_in_order)
+    assignment2, _ = initialize()
+    assignment2 = np.array(assignment2)
+    assert np.array_equal(assignment, assignment2)

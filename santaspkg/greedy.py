@@ -27,7 +27,7 @@ class AssignmentHelper(object):
         self.n_days_above_max = other.n_days_above_max
 
     def assign(self, fam_id, day):
-        assert self.assignment[fam_id] == -1, \
+        assert not self.is_assigned(fam_id), \
                 'AssignmentHelper doesn\'t support reassignment of families.'
         assert 1 <= day <= N_DAYS, f'Must assign to a day in the range [1, {N_DAYS}].'
         self.assignment[fam_id] = day
@@ -40,6 +40,12 @@ class AssignmentHelper(object):
             self.n_days_below_min -= 1
         if prev_occupancy <= MAX_OCCUPANCY < new_occupancy:
             self.n_days_above_max += 1
+
+    def is_assigned(self, fam_id):
+        return (self.assignment[fam_id] != -1)
+
+    def is_done(self):
+        return (self.assignment != -1).all()
 
     def copy(self):
         return AssignmentHelper(other=self)
@@ -152,4 +158,83 @@ def random_greedy(random_state=None):
         random_state = np.random.RandomState()
     family_order = random_state.permutation(families_in_order)
     assignment = greedy(family_order)
+    return assignment
+
+
+def greedy_v2(family_order):
+    # strongly inspired by https://www.kaggle.com/dan3dewey/santa-s-simple-scheduler
+    ah = AssignmentHelper()
+
+    # phase 1
+    lower_days = [62,63,64,65, 69,70,71,72, 76,77,78,79, 83,84,85,86, 90,91,92,93, 97,98,99,100,
+                  20,21,22,23, 27,28,29,30, 34,35,36,37, 41,42,43,44, 48,49,50,51, 55,56,57,58]
+
+    max_ppl_day = 126+25
+
+    ichs =      [0,1,2,1,2,3,2,3,3,1,2,4,3,4,5,4,3,6,7,6,7,4,5,6,8,7,4,8,5,6,7,8,6,7,8,8,9,9]
+    nppl_mins = [0,4,7,3,4,7,3,6,4,0,0,7,3,6,5,4,0,6,7,5,7,3,3,4,7,5,0,6,0,3,3,4,0,0,3,0,7,0]
+
+    for ich, nppl_min in zip(ichs, nppl_mins):
+        for fam_id in family_order:
+            day_ich = desired[fam_id, ich]
+            nppl = family_size[fam_id]
+            if ((not ah.is_assigned(fam_id)) and
+                    (day_ich in lower_days) and
+                    (nppl >= nppl_min) and
+                    (ah.daily_occupancy[day_ich] < max_ppl_day)):
+                ah.assign(fam_id, day_ich)
+
+    # phase 2
+    lower_days = [62,63,64,65, 69,70,71,72, 76,77,78,79, 83,84,85,86, 90,91,92,93, 97,98,99,100]
+
+    max_ppl_day = 220
+    max_ppl_above = 170
+
+    ichs =      [0,1,2,1,2,3,2,3,3,1,2,4,3,4,5,4,3,6,7,6,7,4,5,6,8,7,4,8,5,6,7,8,6,7,8] #,8,9,9]
+    nppl_mins = [0,4,7,3,4,7,3,6,4,0,0,7,3,6,5,4,0,6,7,5,7,3,3,4,7,5,0,6,0,3,3,4,0,0,3] #,0,7,0]
+
+    for ich, nppl_min in zip(ichs, nppl_mins):
+        for fam_id in family_order:
+            day_ich = desired[fam_id, ich]
+            nppl = family_size[fam_id]
+            if day_ich < 59:
+                ppl_limit = max_ppl_day
+            else:
+                ppl_limit = max_ppl_above
+            if ((not ah.is_assigned(fam_id)) and
+                    (day_ich not in lower_days) and
+                    (nppl >= nppl_min) and
+                    (ah.daily_occupancy[day_ich] < ppl_limit)):
+                ah.assign(fam_id, day_ich)
+
+    # phase 3
+    max_ppl_day = 260
+    max_ppl_above = 210
+
+    ichs =      [0,1,2,1,2,3,2,3,3,1,2,4,3,4,5,4,3,6,7,6,7,4,5,6,8,7,4,8,5,6,7,8,6,7,8,8,9,9]
+    nppl_mins = [0,4,7,3,4,7,3,6,4,0,0,7,3,6,5,4,0,6,7,5,7,3,3,4,7,5,0,6,0,3,3,4,0,0,3,0,7,0]
+
+    for ich, nppl_min in zip(ichs, nppl_mins):
+        for fam_id in family_order:
+            day_ich = desired[fam_id, ich]
+            nppl = family_size[fam_id]
+            if day_ich < 59:
+                ppl_limit = max_ppl_day
+            else:
+                ppl_limit = max_ppl_above
+            if ((not ah.is_assigned(fam_id)) and
+                    (nppl >= nppl_min) and
+                    (ah.daily_occupancy[day_ich] < ppl_limit)):
+                ah.assign(fam_id, day_ich)
+        if ah.is_done():
+            break
+
+    return ah.assignment
+
+
+def random_greedy_v2(random_state=None):
+    if random_state is None:
+        random_state = np.random.RandomState()
+    family_order = random_state.permutation(families_in_order)
+    assignment = greedy_v2(family_order)
     return assignment
