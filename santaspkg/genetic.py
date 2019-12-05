@@ -84,7 +84,7 @@ def pick_parents(gene_pool, new_genes, m, n):
 
 def genetic_algorithm(generations=3, gene_pool_size=150):
     n_cpus = mp.cpu_count() - 1
-    worker_pool = mp.Pool(processes=n_cpus, maxtasksperchild=100)
+    worker_pool = mp.Pool(processes=n_cpus)
 
     gene_pool = worker_pool.starmap(Chromosome, (() for x in range(4*n_cpus)))
     gene_pool.sort(key=lambda c: c.get_score())
