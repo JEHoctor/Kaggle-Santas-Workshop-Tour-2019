@@ -1,9 +1,6 @@
 from santaspkg.cost_function import soft_cost_function
-from santaspkg.dataset import data
+from santaspkg.dataset import desired
 import numpy as np
-
-
-desired = data.values[:, :-1]
 
 
 def refinement_pass(prediction):
