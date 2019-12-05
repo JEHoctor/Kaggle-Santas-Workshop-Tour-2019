@@ -27,3 +27,14 @@ def refine_until_convergence(prediction):
         prediction = new_prediction
         new_prediction = refinement_pass(prediction)
     return new_prediction
+
+
+def refine_n(prediction, N):
+    ''' refine_n; refine until convergence with at most N passes'''
+    new_prediction = refinement_pass(prediction)
+    i = 1
+    while not np.array_equal(new_prediction, prediction) and i < N:
+        prediction = new_prediction
+        new_prediction = refinement_pass(prediction)
+        i += 1
+    return new_prediction
