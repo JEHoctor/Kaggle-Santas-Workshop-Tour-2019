@@ -1,6 +1,8 @@
 from santaspkg.constants import *
 from santaspkg.dataset import desired, family_size, N_FAMILIES
 
+import numpy as np
+
 
 penalties = np.asarray([
     [
