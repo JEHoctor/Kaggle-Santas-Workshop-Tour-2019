@@ -21,27 +21,11 @@ sample_submission = pd.read_csv(sample_submission_file, index_col='family_id')
 # https://www.kaggle.com/nickel/250x-faster-cost-function-with-numba-jit
 desired = np.copy(data.values[:, :-1])
 family_size = np.copy(data.n_people.values)
-penalties = np.asarray([
-    [
-        0,
-        50,
-        50 + 9 * n,
-        100 + 9 * n,
-        200 + 9 * n,
-        200 + 18 * n,
-        300 + 18 * n,
-        300 + 36 * n,
-        400 + 36 * n,
-        500 + 36 * n + 199 * n,
-        500 + 36 * n + 398 * n
-    ] for n in range(family_size.max() + 1)
-])
 N_FAMILIES = len(family_size)
 
 
 desired.flags.writeable = False
 family_size.flags.writeable = False
-penalties.flags.writeable = False
 
 
 sample_assignment = np.copy(sample_submission.assigned_day.values)
