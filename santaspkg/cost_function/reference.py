@@ -1,33 +1,35 @@
 # This is the reference implementation of the cost function for this competition.
 # It can be found at https://www.kaggle.com/inversion/santa-s-2019-starter-notebook
 
+from santaspkg.constants import *
+from santaspkg.dataset import data
+
 import numpy as np
 import pandas as pd
-from santaspkg import dataset
 
-data = pd.read_csv(dataset.family_data_file, index_col='family_id')
 
 family_size_dict = data[['n_people']].to_dict()['n_people']
 
 cols = [f'choice_{i}' for i in range(10)]
 choice_dict = data[cols].to_dict()
 
-N_DAYS = 100
-MAX_OCCUPANCY = 300
-MIN_OCCUPANCY = 125
-
 # from 100 to 1
 days = list(range(N_DAYS,0,-1))
 
-def reference_cost_function(prediction):
-
+def reference_cost_function(assignment):
+    '''
+    This is the reference implementation of the cost function, though with
+    some tweaks to integrate better with our code. It is equally happy taking
+    in numpy arrays and lists. The input should be a list of assigned days, one
+    for each family, in family_id order.
+    '''
     penalty = 0
 
     # We'll use this to count the number of people scheduled each day
     daily_occupancy = {k:0 for k in days}
     
     # Looping over each family; d is the day for each family f
-    for f, d in enumerate(prediction):
+    for f, d in enumerate(assignment):
 
         # Using our lookup dictionaries to make simpler variable names
         n = family_size_dict[f]

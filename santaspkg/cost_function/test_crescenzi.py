@@ -1,24 +1,14 @@
-from santaspkg.cost_function.four_x_faster import cost_function as four_x_faster_cost_function
-from santaspkg.cost_function.crescenzi_cost_function import jited_cost, desired, family_size, penalties
-from santaspkg.cost_function.reference_cost_function import reference_cost_function, choice_dict
+from santaspkg.cost_function.crescenzi import soft_cost_function as cost_function_under_test
+from santaspkg.cost_function.reference import reference_cost_function, choice_dict
 from santaspkg.dataset import sample_submission
+
 import numpy as np
-
-
-# This should always return the same value as the reference implementation. If there
-# are any days out of range, it will re-calculate using the 4x-faster implementation.
-def cost_function_under_test(prediction):
-    penalty, n_out_of_range = jited_cost(np.asarray(prediction), desired, family_size, penalties)
-    if n_out_of_range > 0:
-        return four_x_faster_cost_function(prediction)
-    else:
-        return penalty
 
 
 def both_cost_functions(prediction):
     a = reference_cost_function(prediction)
     b = cost_function_under_test(prediction)
-    assert a-b < 0.5 #assert a == b
+    assert abs(a-b) < 0.0005
     return a
 
 
