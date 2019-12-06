@@ -1,7 +1,8 @@
 from santaspkg.greedy import random_greedy, AssignmentHelper, families_in_order, greedy_v2
 from santaspkg.constants import *
-from santaspkg.dataset import desired, family_size, penalties
-from santaspkg.cost_function.crescenzi_cost_function import jited_cost
+from santaspkg.dataset import desired, family_size
+from santaspkg.cost_function.tables import penalties
+from santaspkg.cost_function.crescenzi import jited_cost
 from santaspkg.cost_function import reference_cost_function
 from santaspkg.dataset import sample_assignment
 from santaspkg.simple_scheduler import initialize

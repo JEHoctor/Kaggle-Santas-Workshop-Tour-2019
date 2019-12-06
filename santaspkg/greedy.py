@@ -1,5 +1,6 @@
 from santaspkg.constants import *
-from santaspkg.dataset import desired, family_size, penalties, N_FAMILIES
+from santaspkg.dataset import desired, family_size, N_FAMILIES
+from santaspkg.cost_function.tables import penalties
 
 import numpy as np
 
